@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="open.css">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            cursor: pointer;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        th {
+            background-color: #4CAF50; 
+            color: white;
+            font-weight: bold; 
+        }
+    </style>
+</head>
+<body>
+    <h1>EJS FILE</h1>
+
+    <!-- Display form regardless of 'users' -->
+    <form action="/datatransfer" method="POST">
+        <input type="text" name="branchname" placeholder="BranchName" class="branchname">
+        <br>
+        <input type="text" class="Dependency" name="Dependency" placeholder="Dependency">
+        <br>
+        <input type="text" class="Change log" name="Change log" placeholder="Change log">
+        <br>
+        <input type="text" class="Ticket ID" name="Ticket ID" placeholder="Ticket ID">
+        <br>
+        <input type="text" class="Developer name" name="Developer name" placeholder="Developer name">
+        <br>
+        <button type="submit">SUBMIT</button>
+    </form>
+    <!-- Display data list if 'users' has content -->
+    <% if (users && users.length > 0) { %>
+        <form id="approvalForm" action="/approved" method="POST">
+            <table>
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" id="select-all" onclick="toggleAllCheckboxes(this)"></th>
+                        <th>Branch Name</th>
+                        <th>Dependency</th>
+                        <th>Change Log</th>
+                        <th>Ticket ID</th>
+                        <th>Developer Name</th>
+                        <th>IsApproved</th>
+                        <th>IsPublished</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% users.forEach(user => { %>
+                        <tr>
+                            <td><input type="checkbox" class="row-checkbox" name="selectedUsers" value="<%= user._id %>"></td>
+                            <td><%= user.BranchName %></td>
+                            <td><%= user.Dependency %></td>
+                            <td><%= user.ChangeLog %></td>
+                            <td><%= user.TicketID %></td>
+                            <td><%= user.DeveloperName %></td>
+                            <td><%= user.IsApproved %></td>
+                            <td><%= user.IsPublished %></td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+            <button type="submit" name="action" value="approve">Approve</button>
+            <button type="submit" name="action" value="publish">Publish</button>
+        </form>
+    <% } else { %>
+        <p>No data available to display.</p>
+    <% } %>
+
+    <script>
+        function toggleAllCheckboxes(source) {
+            const checkboxes = document.querySelectorAll('.row-checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = source.checked;
+            });
+        }
+    </script>
+</body>
+</html>
